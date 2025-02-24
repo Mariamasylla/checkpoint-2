@@ -34,4 +34,5 @@ PC3 aurait une IP 10.10.80.3/16, mais serait dans le réseau 10.11.0.0/16.
 Ils ne pourraient plus communiquer correctement, car ils auraient des adresses IP qui ne correspondent plus au sous-réseau du switch.
 **Q.3.10 Comment mettre la configuration IP en dynamique ?**
 Utiliser un serveur DHCP pour attribuer automatiquement des adresses IP aux PC.
-Le routeur B ou un autre serveur peut jouer ce rôle.
+Le routeur B ou un autre serveur peut jouer 
+test
