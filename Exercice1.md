@@ -37,3 +37,19 @@ Sur le client, vérifiez l'adresse IP obtenue avec :
 ipconfig /all windows
 
 ifconfig         Linux 
+
+**Le client** ne prend pas toujours la première adresse DHCP disponible à cause des baux DHCP actifs, des réservations et du cache DHCP.
+
+**Q.1.4 Attribution spécifique de l'adresse 172.16.10.15 via DHCP**
+1 : Vérifier si l'adresse 172.16.10.15 est dans la plage DHCP
+Sur le serveur DHCP :
+
+Ouvrez Gestionnaire de serveur → Outils → DHCP .
+Naviguer dans IPv4 → Étendue DHCP → Étendue .
+Vérifiez la plage d'adresses (ex. 172.16.10.10 - 172.16.10.50).
+Si l'adresse 172.16.10.15 est dans la plage, elle peut être attribuée.
+
+2 : Réserver l'adresse pour le client
+Récupérer l'adresse MAC du client :
+ipconfig /all   # Windows
+ifconfig        # Linux
