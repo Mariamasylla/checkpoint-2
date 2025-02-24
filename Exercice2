@@ -1,0 +1,73 @@
+# Définition de la fonction de log
+function Log {
+    param ([string]$Message)
+    $LogFile = "C:\Scripts\Log.txt"
+    "$(Get-Date) - $Message" | Out-File -Append -FilePath $LogFile
+}
+
+# Importation des utilisateurs en ne gardant que les champs nécessaires
+$Users = Import-Csv "C:\Scripts\Users.csv" | Select-Object Prenom, Nom, Description
+
+# Traitement des utilisateurs
+foreach ($User in $Users) {
+    # Création de la variable $Name
+    $Name = "$($User.Prenom).$($User.Nom)"
+
+    # Vérification si l'utilisateur existe déjà
+    if (Get-LocalUser -Name $Name -ErrorAction SilentlyContinue) {
+        Write-Output "L'utilisateur $Name existe déjà."
+        Log "Utilisateur $Name existe déjà. Aucune action effectuée."
+        continue
+    }
+
+    # Génération d'un mot de passe aléatoire de 10 caractères
+    $Password = -join ((48..57) + (65..90) + (97..122) | Get-Random -Count 10 | ForEach-Object { [char]$_ })
+    $SecurePassword = ConvertTo-SecureString $Password -AsPlainText -Force
+
+    # Création du compte utilisateur avec la description et sans expiration du mot de passe
+    New-LocalUser -Name $Name -Password $SecurePassword -FullName "$($User.Prenom) $($User.Nom)" -Description $User.Description -PasswordNeverExpires $true
+
+    # Ajout de l'utilisateur au groupe "Utilisateurs"
+    Add-LocalGroupMember -Group "Users" -Member $Name
+
+    # Affichage et journalisation de la création de l'utilisateur
+    Write-Output "Utilisateur $Name créé avec succès. Mot de passe : $Password"
+    Log "Utilisateur $Name créé avec succès. Mot de passe : $Password"
+}
+
+
+
+Explication des corrections
+**Lancement du script ( Q.2.1) :**
+
+Main.ps1ne doit pas utiliser Start-Process PowerShell -ArgumentList "C:\Scripts\AddLocalUsers.ps1" -Verb RunAs.
+**Correction du premier utilisateur ignoré ( Q.2.2) :**
+
+Import-Csvest utilisé normalement, sans erreur de saut de ligne.
+✅ Utilisation du champ Description( Q.2.3) :
+
+Ajout de -Description $User.Descriptiondans New-LocalUser.
+✅ Sélection des champs utiles ( Q.2.4) :
+
+Import-Csv | Select-Object Prenom, Nom, Descriptiongarde uniquement les champs nécessaires.
+✅ Affichage du mot de passe ( Q.2.5) :
+
+Write-Output "Utilisateur $Name créé avec succès. Mot de passe : $Password"affiche le mot de passe.
+✅ Ajout de journaux ( Q.2.6) :
+
+La fonction Logenregistre chaque action dans C:\Scripts\Log.txt.
+✅ Affichage lorsqu'un utilisateur existe ( Q.2.7) :
+
+Si Get-LocalUser -Name $Namevous trouvez un utilisateur, un message est affiché.
+✅ Correction de l'ajout au groupe ( Q.2.8) :
+
+Add-LocalGroupMember -Group "Users" -Member $Nameajoute correctement l'utilisateur.
+✅ Utilisation de la variable $Name( Q.2.9) :
+
+$Name = "$($User.Prenom).$($User.Nom)"est utilisé partout.
+✅ Empêcher l'expiration du mot de passe ( Q.2.10) :
+
+-PasswordNeverExpires $trueajouté à New-LocalUser.
+✅ Mot de passe de 10 caractères ( Q.2.11) :
+
+Génération avec Get-Random -Count 10.
