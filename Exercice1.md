@@ -6,3 +6,34 @@ Le ping peut ne pas fonctionner pour plusieurs raisons. Une des raisons les plus
 C:\Windows\System32\drivers\etc\hosts 
 on 
 172.16.10.10 serveur
+
+**Q.1.3 Configuration du client en DHCP et analyse de l'attribution d'adresse**
+**1 : Changer la configuration du client en DHCP  Windows :**
+
+Ouvrir Paramètres → Réseau et Internet → Centre Réseau et partage .
+Cliquez sur Modifier les paramètres de la carte .
+Faire un clic droit sur l'interface réseau active et choisir Propriétés .
+Sélectionnez Protocole Internet version 4 (TCP/IPv4) et cliquez sur Propriétés , Cocher 
+Obtenir automatiquement une adresse IP
+Obtenir automatiquement les adresses des serveurs DNS
+Valider avec OK .
+
+**Sur un client Linux :**
+
+Ouvrir un terminal.
+Exécuter la commande 
+sudo dhclient -r
+sudo dhclient
+Cela libère et renouvelle l'adresse IP DHCP.
+ **2 : Vérification du serveur DHCP**
+Sur le serveur DHCP :
+
+Ouvrez Gestionnaire de serveur → Outils → DHCP .
+Naviguer dans IPv4 → Étendue DHCP → Baux actifs .
+Vérifiez les adresses IP distribuées et la plage d'adresses configurées.
+**3 : Comparaison des adresses IP**
+Sur le client, vérifiez l'adresse IP obtenue avec :
+
+ipconfig /all windows
+
+ifconfig         Linux 
